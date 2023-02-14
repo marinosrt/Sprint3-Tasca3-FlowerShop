@@ -2,7 +2,7 @@ package FlowerShop.domain;
 
 import java.util.ArrayList;
 
-class Ticket {
+public class Ticket {
     private ArrayList<Product> products;
     private double totalValue;
 
