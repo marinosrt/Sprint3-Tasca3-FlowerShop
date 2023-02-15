@@ -12,6 +12,7 @@ public class ReadWriteTxt {
     private static final String productPath = "products.txt";
     private static final String ticketPath = "ticket.txt";
 
+
     //read from txt file
     public static List<Product> readProductFile(){
         List<Product> data = new ArrayList<>();

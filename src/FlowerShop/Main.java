@@ -7,6 +7,7 @@ public class Main {
         menu();
     }
 
+    
     private static void menu() throws IOException {
 
         int option;
