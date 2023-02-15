@@ -7,7 +7,7 @@ public class Flower extends Product {
     private long flowerId;
 
 
-    public Flower(String name, double price, int quantity, String material) {
+    public Flower(String name, String color, double price, int quantity) {
         super(name, price, quantity);
         this.color = color;
         this.flowerId = idCounter;
