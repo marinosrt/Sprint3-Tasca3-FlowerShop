@@ -1,13 +1,14 @@
 package FlowerShop;
 
-import FlowerShop.Keyboard;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         menu();
     }
 
-    private static void menu() {
+    
+    private static void menu() throws IOException {
 
         int option;
 
@@ -34,9 +35,9 @@ public class Main {
                 case 3 -> menuOptions.addFlower();
                 case 4 -> menuOptions.addDecoration();
                 case 5 -> menuOptions.printAllStock();
-                case 6 -> menuOptions.retrieveTree();
-                case 7 -> menuOptions.retrieveFlower();
-                case 8 -> menuOptions.retrieveDecoration();
+                case 6 -> menuOptions.removeTree();
+                case 7 -> menuOptions.removeFlower();
+                case 8 -> menuOptions.removeDecoration();
                 case 9 -> menuOptions.printStockAndQuantities();
                 case 10 -> menuOptions.printFullValue();
                 case 11 -> menuOptions.createPurchaseTicket();

@@ -9,8 +9,10 @@ import java.util.List;
 
 public class ReadWriteTxt {
 
-    private static final String pathProduct = "products.txt";
-    private static final String pathTicket = "tickets.txt";
+    private static final String productPath = "products.txt";
+    private static final String ticketPath = "ticket.txt";
+
+
 
     //read from txt file
     public static List<Product> readProductFile(){
@@ -19,7 +21,9 @@ public class ReadWriteTxt {
         Product product;
 
         try {
-            fis = new ObjectInputStream(new FileInputStream(pathProduct));
+
+            fis = new ObjectInputStream(new FileInputStream(productPath));
+
             while ((product = (Product) fis.readObject()) != null){
                 data.add(product);
             }
@@ -45,7 +49,9 @@ public class ReadWriteTxt {
         Ticket ticket;
 
         try {
-            fis = new ObjectInputStream(new FileInputStream(pathTicket));
+
+            fis = new ObjectInputStream(new FileInputStream(ticketPath));
+
             while ((ticket = (Ticket) fis.readObject()) != null){
                 data.add(ticket);
             }
@@ -66,24 +72,28 @@ public class ReadWriteTxt {
 
     //fer un archivo índice per accedir a aquell objecte en concret sense llegir tot el file
     //caldria lligar amb el NOM del producte? amb ID?
-    /*public static Product getProduct(){
+
+    /*public static Product getProduct() {
 
     }*/
 
 
     //write txt file
+
     /*
     Com que estem guardant OBJECTES al -txt, no hi ha manera amb java de simplement afegir
     al final de la llista. S'ha de tornar a llegir tot (per això cridem al metode read, que retorna un array)
     afegir el object i tornar a escriure
      */
+
     public static void addProduct(Product product) throws IOException {
 
         FileOutputStream fos = null;
         ObjectOutputStream writer = null;
         List<Product> data;
 
-        File file = new File(pathProduct);
+        File file = new File(productPath);
+
 
         if (file.exists()) {
             data = readProductFile();
@@ -95,7 +105,9 @@ public class ReadWriteTxt {
         data.add(product);
 
         try {
-            fos = new FileOutputStream(pathProduct);
+
+            fos = new FileOutputStream(productPath);
+
             writer = new ObjectOutputStream(fos);
 
             for (Product p : data) {
@@ -119,7 +131,8 @@ public class ReadWriteTxt {
         ObjectOutputStream writer = null;
         List<Ticket> data;
 
-        File file = new File(pathTicket);
+        File file = new File(ticketPath);
+
 
         if (file.exists()) {
             data = readTicketFile();
@@ -131,7 +144,8 @@ public class ReadWriteTxt {
         data.add(ticket);
 
         try {
-            fos = new FileOutputStream(pathTicket);
+            fos = new FileOutputStream(ticketPath);
+
             writer = new ObjectOutputStream(fos);
 
             for (Ticket p : data) {
@@ -157,13 +171,11 @@ public class ReadWriteTxt {
 
         List<Product> data = readProductFile();
 
-        do {
-            //data.removeIf(product -> product.getName().equalsIgnoreCase(nameProduct));
-            amount--;
-        } while (amount !=0);
+        data.removeIf(product -> product.getName().equalsIgnoreCase(nameProduct));
 
         try {
-            fos = new FileOutputStream(pathProduct);
+            fos = new FileOutputStream(productPath);
+
             writer = new ObjectOutputStream(fos);
 
             for (Product product : data) {
