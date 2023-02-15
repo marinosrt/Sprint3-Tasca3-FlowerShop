@@ -1,12 +1,17 @@
 package FlowerShop.domain;
 
-public class Decoration implements Product {
+public class Decoration extends Product {
     private String material;
-    private double price;
+    private static long idCounter = 1;
+    private long decorationId;
 
-    public Decoration(String material, double price) {
+
+    public Decoration(String name, double price, int quantity, String material) {
+        super(name, price, quantity);
         this.material = material;
-        this.price = price;
+        this.decorationId = idCounter;
+        idCounter++;
+
     }
 
     public String getMaterial() {
@@ -17,17 +22,11 @@ public class Decoration implements Product {
         this.material = material;
     }
 
-    @Override
-    public double getPrice() {
-        return price;
+    public String toString() {
+
+        return "id: " + decorationId + ", material: " + material;
+
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    @Override
-    public String getType() {
-        return "Decoration";
-    }
 }
+
