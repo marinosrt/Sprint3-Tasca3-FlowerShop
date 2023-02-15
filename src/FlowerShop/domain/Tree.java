@@ -1,32 +1,36 @@
 package FlowerShop.domain;
 
-public class Tree implements Product {
-    private double height;
-    private double price;
 
-    public Tree(double height, double price) {
+public class Tree extends Product {
+    private String height;
+    private static long idCounter = 1;
+    private long treeId;
+
+    public Tree(String name, double price, int quantity, String height, long id) {
+        super(name, price, quantity);
         this.height = height;
-        this.price = price;
-    }
+        this.treeId = idCounter;
+        idCounter++;
 
-    public double getHeight() {
+
+    }
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public double getPrice() {
-        return price;
+    public String toString() {
+
+        return "id: " + treeId + ", height: " + height;
+
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    @Override
-    public String getType() {
-        return "Tree";
-    }
 }
+
+
+
+
+

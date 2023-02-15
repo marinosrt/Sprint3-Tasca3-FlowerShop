@@ -1,14 +1,19 @@
+
 package FlowerShop.domain;
 
-public class Flower implements Product {
+public class Flower extends Product {
     private String color;
-    private double price;
+    private static long idCounter = 1;
+    private long flowerId;
 
-    public Flower(String color, double price) {
+
+    public Flower(String name, double price, int quantity, String material) {
+        super(name, price, quantity);
         this.color = color;
-        this.price = price;
-    }
+        this.flowerId = idCounter;
+        idCounter++;
 
+    }
     public String getColor() {
         return color;
     }
@@ -17,16 +22,11 @@ public class Flower implements Product {
         this.color = color;
     }
 
-    public double getPrice() {
-        return price;
+    public String toString() {
+
+        return "id: " + flowerId + ", color: " + color;
+
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    @Override
-    public String getType() {
-        return "Flower";
-    }
 }
+
