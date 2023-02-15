@@ -2,23 +2,21 @@ package FlowerShop.domain;
 
 
 public class Tree extends Product {
-    private String height;
+    private double height;
     private static long idCounter = 1;
     private long treeId;
 
-    public Tree(String name, double price, int quantity, String height, long id) {
+    public Tree(String name, double height, double price, int quantity) {
         super(name, price, quantity);
         this.height = height;
         this.treeId = idCounter;
         idCounter++;
-
-
     }
-    public String getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(String height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 

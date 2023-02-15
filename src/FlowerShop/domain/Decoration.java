@@ -6,7 +6,7 @@ public class Decoration extends Product {
     private long decorationId;
 
 
-    public Decoration(String name, double price, int quantity, String material) {
+    public Decoration(String name, String material, double price, int quantity) {
         super(name, price, quantity);
         this.material = material;
         this.decorationId = idCounter;
