@@ -7,6 +7,7 @@ public class FlowerShop {
     private String name;
     private List<Ticket> purchases;
     private Stock stock;
+    private static FlowerShop instance;
 
     public FlowerShop(String name) {
         this.name = name;
@@ -36,5 +37,12 @@ public class FlowerShop {
 
     public void setStock(Stock stock) {
         this.stock = stock;
+    }
+
+    public static FlowerShop getInstance(String name) {
+        if (instance == null) {
+            instance = new FlowerShop(name);
+        }
+        return instance;
     }
 }

@@ -13,8 +13,7 @@ public class menuOptions {
 
     public static void createFlowerShop() {
 
-        flowerShop = new FlowerShop(Keyboard.getString("Type the flower's shop name."));
-
+        flowerShop = FlowerShop.getInstance(Keyboard.getString("Type the flower's shop name."));
     }
 
     public static void addTree() {
