@@ -32,20 +32,8 @@ public class Tree extends Product {
                     });
             return newID.longValue();
         } else {
-            return 1;
+            return 0;
         }
-
-        /*if (productList != null){
-            return productList.stream()
-                    .filter(product -> product.getClass().equals(Tree.class))
-                    .mapToLong(Product::getProductId)
-                    .max()
-                    .orElse(1L);
-        } else {
-            return 1;
-        }*/
-
-
 
     }
 
@@ -60,7 +48,7 @@ public class Tree extends Product {
     public String toString() {
 
         return "- Tree. Type: " + super.getName()
-                + "\nID: " + this.treeId
+                + "\nID: " + super.productId
                 + ". Height: " + this.height
                 + ". Amount " + super.getQuantity()
                 + ". Price: " + super.getPrice();
