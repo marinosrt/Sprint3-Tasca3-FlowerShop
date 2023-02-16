@@ -19,9 +19,9 @@ public class Main {
                     3. Add a flower.
                     4. Add a decoration.
                     5. Print all the stock from the flower show.
-                    6. Retrieve tree.
-                    7. Retrieve flower.
-                    8. Retrieve decoration.
+                    6. Remove tree.
+                    7. Remove flower.
+                    8. Remove decoration.
                     9. Print stock & quantities.
                     10. Print full flower shop value.
                     11. Create a purchase ticket.
@@ -35,9 +35,9 @@ public class Main {
                 case 3 -> menuOptions.addFlower();
                 case 4 -> menuOptions.addDecoration();
                 case 5 -> menuOptions.printAllStock();
-                case 6 -> menuOptions.removeTree();
-                case 7 -> menuOptions.removeFlower();
-                case 8 -> menuOptions.removeDecoration();
+                case 6 -> menuOptions.removeProduct("tree");
+                case 7 -> menuOptions.removeProduct("flower");
+                case 8 -> menuOptions.removeProduct("decoration");
                 case 9 -> menuOptions.printStockAndQuantities();
                 case 10 -> menuOptions.printFullValue();
                 case 11 -> menuOptions.createPurchaseTicket();

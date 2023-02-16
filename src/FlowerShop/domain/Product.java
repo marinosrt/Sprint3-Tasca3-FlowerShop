@@ -1,17 +1,27 @@
 package FlowerShop.domain;
 
+import FlowerShop.repository.ReadWriteTxt;
+
 import java.io.Serializable;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class Product implements Serializable {
 
-    private String name;
-    private double price;
-    private int quantity;
+    protected String name;
+    protected double price;
+    protected int quantity;
+
+    protected long productId = 1;
 
     public Product(String name, double price, int quantity) {
-        this.price = price;
         this.name = name;
+        this.price = price;
         this.quantity = quantity;
+    }
+
+    public long getProductId() {
+        return productId;
     }
 
     public String getName() {
