@@ -19,20 +19,24 @@ public class Decoration extends Product {
 
     }
 
-    public static long updateID(){
+    public static long updateID() {
         List<Product> productList;
         AtomicLong newID = new AtomicLong();
 
         productList = ReadWriteTxt.readProductFile();
 
-        productList.stream()
-                .filter(product -> product.getClass().equals(Flower.class))
-                .reduce((first, second) -> second)
-                .ifPresent(product -> {
-                    newID.set(product.getProductId());
-                });
+        if (productList != null) {
+            productList.stream()
+                    .filter(product -> product.getClass().equals(Decoration.class))
+                    .reduce((first, second) -> second)
+                    .ifPresent(product -> {
+                        newID.set(product.getProductId());
+                    });
+            return newID.longValue();
+        } else {
+            return 0;
+        }
 
-        return newID.longValue();
     }
 
     public String getMaterial() {
@@ -46,7 +50,7 @@ public class Decoration extends Product {
     public String toString() {
 
         return "- Decoration. Type: " + super.getName()
-                + "\nID: " + this.decorationId
+                + "\nID: " + super.productId
                 + ". Material: " + this.material
                 + ". Amount: " + super.getQuantity()
                 + ". Price: " + super.getPrice();

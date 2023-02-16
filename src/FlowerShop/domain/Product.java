@@ -12,7 +12,7 @@ public abstract class Product implements Serializable {
     protected double price;
     protected int quantity;
 
-    protected long productId = 1;
+    protected long productId;
 
     public Product(String name, double price, int quantity) {
         this.name = name;
