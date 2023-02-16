@@ -14,6 +14,7 @@ public class Flower extends Product {
         idCounter++;
 
     }
+
     public String getColor() {
         return color;
     }
@@ -22,9 +23,14 @@ public class Flower extends Product {
         this.color = color;
     }
 
+    @Override
     public String toString() {
 
-        return "id: " + flowerId + ", color: " + color;
+        return "- Flower. Type: " + super.getName() + "\n" +
+                "ID: " + this.flowerId
+                + ". Color: " + this.color
+                + ". Amount: " + super.getQuantity()
+                + ". Price: " + super.getPrice();
 
     }
 

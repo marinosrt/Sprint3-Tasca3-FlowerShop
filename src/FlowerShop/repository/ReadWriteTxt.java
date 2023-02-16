@@ -16,25 +16,34 @@ public class ReadWriteTxt {
 
     //read from txt file
     public static List<Product> readProductFile(){
-        List<Product> data = new ArrayList<>();
+        List<Product> data = null;
         ObjectInputStream fis = null;
         Product product;
+        File file;
 
         try {
 
-            fis = new ObjectInputStream(new FileInputStream(productPath));
+            file = new File(productPath);
 
-            while ((product = (Product) fis.readObject()) != null){
-                data.add(product);
+            if (file.exists()){
+                data = new ArrayList<>();
+                fis = new ObjectInputStream(new FileInputStream(productPath));
+
+                while ((product = (Product) fis.readObject()) != null){
+                    data.add(product);
+                }
             }
-        } catch (IOException | ClassNotFoundException ex){
+
+        } catch (EOFException ex) {
+            // No hagas nada, es normal que llegue al final del archivo
+        } catch (IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
         } finally {
             try {
-                if (fis != null){
+                if (fis != null) {
                     fis.close();
                 }
-            } catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -52,7 +61,8 @@ public class ReadWriteTxt {
 
             fis = new ObjectInputStream(new FileInputStream(ticketPath));
 
-            while ((ticket = (Ticket) fis.readObject()) != null){
+            while (fis.available() > 0) {
+                ticket = (Ticket) fis.readObject();
                 data.add(ticket);
             }
         } catch (IOException | ClassNotFoundException ex){
@@ -70,21 +80,7 @@ public class ReadWriteTxt {
         return data;
     }
 
-    //fer un archivo índice per accedir a aquell objecte en concret sense llegir tot el file
-    //caldria lligar amb el NOM del producte? amb ID?
-
-    /*public static Product getProduct() {
-
-    }*/
-
-
     //write txt file
-
-    /*
-    Com que estem guardant OBJECTES al -txt, no hi ha manera amb java de simplement afegir
-    al final de la llista. S'ha de tornar a llegir tot (per això cridem al metode read, que retorna un array)
-    afegir el object i tornar a escriure
-     */
 
     public static void addProduct(Product product) throws IOException {
 
@@ -93,7 +89,6 @@ public class ReadWriteTxt {
         List<Product> data;
 
         File file = new File(productPath);
-
 
         if (file.exists()) {
             data = readProductFile();
@@ -164,14 +159,18 @@ public class ReadWriteTxt {
 
     }
 
-    public static void removeProduct(String nameProduct, int amount) throws IOException {
+    public static void removeProductFromFile(String nameProduct, int amount) throws IOException {
 
         ObjectOutputStream writer = null;
         FileOutputStream fos = null;
 
         List<Product> data = readProductFile();
 
-        data.removeIf(product -> product.getName().equalsIgnoreCase(nameProduct));
+        do{
+            data.removeIf(product -> product.getName().equalsIgnoreCase(nameProduct));
+            amount--;
+        } while (amount != 0);
+
 
         try {
             fos = new FileOutputStream(productPath);
