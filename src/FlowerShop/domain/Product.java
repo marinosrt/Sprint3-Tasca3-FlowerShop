@@ -6,13 +6,17 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class Product implements Serializable {
+public class Product implements Serializable {
 
     protected String name;
     protected double price;
-    protected int quantity;
-
+    protected static int quantity;
     protected long productId;
+
+    public Product(String name, int quantity) {
+        this.name = name;
+        this.quantity = quantity;
+    }
 
     public Product(String name, double price, int quantity) {
         this.name = name;
@@ -40,8 +44,9 @@ public abstract class Product implements Serializable {
         this.name = name;
     }
 
+
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        this.quantity = this.quantity + quantity;
     }
 
     public void setPrice(double price) {
