@@ -9,6 +9,7 @@ import java.io.IOException;
 public class menuOptions {
 
     static FlowerShop flowerShop;
+    static Ticket ticket;
 
     public static void createFlowerShop() {
 
@@ -17,7 +18,7 @@ public class menuOptions {
 
     public static void addTree() {
 
-        Tree tree = new Tree(Keyboard.getString("What kind of tree is?"),
+        Product tree = new Tree(Keyboard.getString("What kind of tree is?"),
                 Keyboard.getDouble("Type the tree's height."),
                 Keyboard.getDouble("Enter the tree's retail price."),
                 Keyboard.getInt("How many trees are you adding?"));
@@ -116,10 +117,51 @@ public class menuOptions {
     public static void printFullValue() {
     }
 
-    public static void createPurchaseTicket() {
+    public static void createPurchaseTicket() throws IOException {
+
+        int option;
+        ticket = new Ticket();
+
+        do {
+            System.out.println("""
+                    1- Add Product.
+                    2. Stop adding product to ticket.""");
+            option = Keyboard.getInt("Choose an option.");
+
+            switch (option){
+                case 1 -> {
+                    Product purchaseProduct = new Product(Keyboard.getString("Type the name of the product you want to buy"),
+                            Keyboard.getInt("Type the amount you want to buy"));
+                    createPurchaseTicketCalcul(purchaseProduct);
+                }
+                case 2 -> ReadWriteTxt.addTicket(ticket);
+
+            }
+        } while (option != 2);
+    }
+
+    public static void createPurchaseTicketCalcul(Product purchaseProduct) throws IOException {
+
+        int amount = ReadWriteTxt.readProductFile().stream()
+            .filter(databaseProduct -> databaseProduct.getName().equalsIgnoreCase(purchaseProduct.getName()))
+            .mapToInt(Product::getQuantity)
+            .sum();
+
+        if (amount >= purchaseProduct.getQuantity()) {
+            ticket.addProduct(purchaseProduct);
+            ReadWriteTxt.removeProductFromFile(purchaseProduct.getName(), amount);
+            System.out.println("Product added to ticket");
+        } else {
+            System.out.println("The desired quantity exceeds the stock.");
+        }
+
+        //s'ha canviat el mètode add i ara no cal recorrer tota la llista, ja que tots els productes que siguin iguals s'ajunataran en un i es sumarà la quantitat
+        //un cop trobem el producte parar de buclejar
     }
 
     public static void printOldPurchases() {
+
+        ReadWriteTxt.readTicketFile().forEach(System.out::println);
     }
 
     public static void printTotalSumPurchases() {

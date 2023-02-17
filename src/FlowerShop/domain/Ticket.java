@@ -1,8 +1,9 @@
 package FlowerShop.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Ticket {
+public class Ticket implements Serializable {
     private ArrayList<Product> products;
     private double totalValue;
 
