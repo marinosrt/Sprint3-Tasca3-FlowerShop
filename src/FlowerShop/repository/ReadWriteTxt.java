@@ -87,6 +87,7 @@ public class ReadWriteTxt {
         FileOutputStream fos = null;
         ObjectOutputStream writer = null;
         List<Product> data;
+        boolean exit = false;
 
         File file = new File(productPath);
 
@@ -97,7 +98,22 @@ public class ReadWriteTxt {
             data = new ArrayList<>();
         }
 
-        data.add(product);
+        //comprovem si ja hi ha un producte d'aquest tipus. si hi és, actualitzem
+        //quantitats però no afegim un nou producte. Si no hi ha Flower "rosa" (per exemple)
+        //afegim la rosa a la llista
+
+        do{
+            for (Product prodList : data){
+                if (product.getName().equalsIgnoreCase(prodList.getName())){
+                    prodList.setQuantity(product.getQuantity());
+                    exit = true;
+                } else {
+                    data.add(product);
+                }
+            }
+        } while(!exit);
+
+
 
         try {
 
@@ -159,18 +175,14 @@ public class ReadWriteTxt {
 
     }
 
-    public static void removeProductFromFile(String nameProduct, int amount) throws IOException {
+    public static void removeProductFromFile(String nameProduct) throws IOException {
 
         ObjectOutputStream writer = null;
         FileOutputStream fos = null;
 
         List<Product> data = readProductFile();
 
-        do{
-            data.removeIf(product -> product.getName().equalsIgnoreCase(nameProduct));
-            amount--;
-        } while (amount != 0);
-
+        data.removeIf(product -> product.getName().equalsIgnoreCase(nameProduct));
 
         try {
             fos = new FileOutputStream(productPath);
