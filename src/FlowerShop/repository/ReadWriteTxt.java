@@ -7,6 +7,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class provides functionality for reading and writing data to and from text files.
+ */
 public class ReadWriteTxt {
 
     private static final String productPath = "products.txt";
@@ -14,7 +17,11 @@ public class ReadWriteTxt {
 
 
 
-    //read from txt file
+    /**
+     * Reads a list of Product objects from a text file.
+     *
+     * @return a list of Product objects, or null if the file doesn't exist
+     */
     public static List<Product> readProductFile(){
         List<Product> data = null;
         ObjectInputStream fis = null;
@@ -52,6 +59,11 @@ public class ReadWriteTxt {
 
     }
 
+    /**
+     * Reads a list of Ticket objects from a text file.
+     *
+     * @return a list of Ticket objects
+     */
     public static List<Ticket> readTicketFile(){
         List<Ticket> data = null;
         ObjectInputStream fis = null;
@@ -66,13 +78,10 @@ public class ReadWriteTxt {
                 data = new ArrayList<>();
                 fis = new ObjectInputStream(new FileInputStream(ticketPath));
 
-                while ((ticket = (Ticket) fis.readObject()) != null){
-                    data.add(ticket);
-                }
-                /*while (fis.available() > 0) {
+                while (fis.available() > 0) {
                     ticket = (Ticket) fis.readObject();
                     data.add(ticket);
-                }*/
+                }
             }
         } catch (IOException | ClassNotFoundException ex){
             ex.printStackTrace();
@@ -89,8 +98,12 @@ public class ReadWriteTxt {
         return data;
     }
 
-    //write txt file
-
+    /**
+     * Adds a Product object to a text file.
+     *
+     * @param product the Product object to add
+     * @throws IOException if there is an error while writing to the file
+     */
     public static void addProduct(Product product) throws IOException {
 
         FileOutputStream fos = null;
@@ -142,6 +155,12 @@ public class ReadWriteTxt {
         }
     }
 
+    /**
+     * Adds a Ticket object to a text file.
+     *
+     * @param ticket the Ticket object to add
+     * @throws IOException if there is an error while writing to the file
+     */
     public static void addTicket(Ticket ticket) throws IOException {
 
         FileOutputStream fos = null;
@@ -182,6 +201,13 @@ public class ReadWriteTxt {
 
     }
 
+    /**
+     * Removes a specified amount of products with the given name from products.txt file.
+     *
+     * @param nameProduct the name of the product to remove
+     * @param amount the amount of products to remove
+     * @throws IOException if an I/O error occurs while writing to the file
+     */
     public static void removeProductFromFile(String nameProduct) throws IOException {
 
         ObjectOutputStream writer = null;

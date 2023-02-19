@@ -3,11 +3,22 @@ package FlowerShop;
 import java.io.IOException;
 
 public class Main {
+
+    /**
+     * The main method is the entry point of the program. It calls the menu method to display the menu options.
+     *
+     * @param args the command line arguments
+     * @throws IOException if an I/O error occurs
+     */
     public static void main(String[] args) throws IOException {
         menu();
     }
 
-    
+    /**
+     * The menu method displays a menu with several options for the user to interact with the FlowerShop.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     private static void menu() throws IOException {
 
         int option;

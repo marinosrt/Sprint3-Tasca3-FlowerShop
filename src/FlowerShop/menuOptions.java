@@ -6,14 +6,18 @@ import FlowerShop.repository.ReadWriteTxt;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
+/**
+ * This class contains a series of static methods that allow to interact with the program's menu and its options.
+ */
 public class menuOptions {
 
     static boolean flowershopCreated = false;
-
     static FlowerShop flowerShop;
     static Ticket ticket;
 
+    /**
+     * Creates a flower shop and assigns the name provided by the user.
+     */
     public static void createFlowerShop() {
 
         flowerShop = FlowerShop.getInstance(Keyboard.getString("Type the flower's shop name."));
@@ -21,6 +25,9 @@ public class menuOptions {
         flowershopCreated = true;
     }
 
+    /**
+     * Adds a new Tree object to the stock.
+     */
     public static void addTree() {
 
         Product tree = new Tree(Keyboard.getString("What kind of tree is?"),
@@ -35,6 +42,9 @@ public class menuOptions {
         }
     }
 
+    /**
+     * Adds a new Flower object to the stock.
+     */
     public static void addFlower() {
 
         Product flower = new Flower(Keyboard.getString("What kind of flower is?"),
@@ -50,6 +60,9 @@ public class menuOptions {
 
     }
 
+    /**
+     * Adds a new Decoration object to the stock.
+     */
     public static void addDecoration() {
 
         Product decoration = new Decoration(Keyboard.getString("What kind of decoration is?"),
@@ -65,6 +78,9 @@ public class menuOptions {
 
     }
 
+    /**
+     * Prints a list of all the products in the stock, showing their name, type and quantity.
+     */
     public static void printAllStock() {
 
         if (ReadWriteTxt.readProductFile() != null){
@@ -75,6 +91,12 @@ public class menuOptions {
 
     }
 
+    /**
+     * Removes a product from the stock.
+     *
+     * @param product the name of the product to be removed
+     * @throws IOException if there is an error accessing the file
+     */
     public static void removeProduct(String product) throws IOException {
 
         if (ReadWriteTxt.readProductFile() != null){
@@ -108,22 +130,42 @@ public class menuOptions {
         System.out.println("Decoration has been removed");
     }*/
 
+    /**
+     * Prints the stock and quantities of all products.
+     */
     public static void printStockAndQuantities() {
 
         if (ReadWriteTxt.readProductFile() != null){
+
+            ReadWriteTxt.readProductFile().forEach(p -> System.out.println("Name:" + p.getName() + " Quantity:" + p.getQuantity()));
 
         } else {
             System.out.println("You need to add some products first!");
         }
 
+
     }
 
+    /**
+     * Prints the total value of all products in stock.
+     */
     public static void printFullValue() {
 
+        double totalValue =
+                ReadWriteTxt.readProductFile().stream()
+                        .mapToDouble(p -> p.getQuantity() * p.getPrice())
+                        .sum();
+
+        System.out.println("The total value of stock is: " + totalValue + "€");
 
 
     }
 
+    /**
+     * Creates a new purchase ticket and adds products to it.
+     *
+     * @throws IOException if there is an error accessing the file
+     */
     public static void createPurchaseTicket() throws IOException {
 
         Product purchaseProduct;
@@ -149,6 +191,12 @@ public class menuOptions {
 
     }
 
+    /**
+     * Adds a product to the purchase ticket.
+     *
+     * @param purchaseProduct the product to add
+     * @throws IOException if there is an error accessing the file
+     */
     public static void createPurchaseTicketCalcul(Product purchaseProduct) throws IOException {
 
         int amount = ReadWriteTxt.readProductFile().stream()
@@ -190,6 +238,9 @@ public class menuOptions {
         //un cop trobem el producte parar de buclejar
     }
 
+    /**
+    * Prints all old purchase tickets.
+    */
     public static void printOldPurchases() {
 
         if (ReadWriteTxt.readTicketFile() != null){
@@ -200,6 +251,9 @@ public class menuOptions {
 
     }
 
+    /**
+     * Prints the total value of all the sells made
+     */
     public static void printTotalSumPurchases() {
 
         AtomicInteger totalSumPurchases = new AtomicInteger();

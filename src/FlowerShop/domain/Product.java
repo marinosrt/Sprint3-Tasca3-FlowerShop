@@ -2,6 +2,10 @@ package FlowerShop.domain;
 
 import java.io.Serializable;
 
+/**
+ * The Product class represents any product sold in the flower shop.
+ * It works as the superclass of Decoration, Tree and Flower.
+ */
 public class Product implements Serializable {
 
     protected String name;
@@ -41,11 +45,20 @@ public class Product implements Serializable {
     }
 
 
+
+    /**
+     * Adds a quantity to the Tree's total quantity.
+     * @param quantity the quantity to be added.
+     */
     public void changeSUMquantity(int quantity) {
         this.quantity = this.quantity + quantity;
     }
 
-    public void changeRESTquantity(int quantity){
+    /**
+     * Subtracts a quantity from the Tree's total quantity.
+     * @param quantity the quantity to be subtracted.
+     */
+    public void changeRESTquantity(int quantity) {
         this.quantity = this.quantity - quantity;
     }
 
