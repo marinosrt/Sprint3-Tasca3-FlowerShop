@@ -47,13 +47,28 @@ public class Decoration extends Product {
         this.material = material;
     }
 
+    @Override
+    public int getQuantity() {
+        return this.quantity;
+    }
+
+    @Override
+    public void changeSUMquantity(int quantity) {
+        this.quantity = this.quantity + quantity;
+    }
+
+    @Override
+    public void changeRESTquantity(int quantity) {
+        this.quantity = this.quantity - quantity;
+    }
+
     public String toString() {
 
         return "- Decoration. Type: " + super.getName()
                 + "\nID: " + super.productId
                 + ". Material: " + this.material
-                + ". Amount: " + super.getQuantity()
-                + ". Price: " + super.getPrice();
+                + ". Total amount: " + super.getQuantity()
+                + ". Price per unit: " + super.getPrice();
 
     }
 

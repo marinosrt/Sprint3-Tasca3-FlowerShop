@@ -1,16 +1,12 @@
 package FlowerShop.domain;
 
-import FlowerShop.repository.ReadWriteTxt;
-
 import java.io.Serializable;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Product implements Serializable {
 
     protected String name;
     protected double price;
-    protected static int quantity;
+    protected int quantity;
     protected long productId;
 
     public Product(String name, int quantity) {
@@ -45,8 +41,12 @@ public class Product implements Serializable {
     }
 
 
-    public void setQuantity(int quantity) {
+    public void changeSUMquantity(int quantity) {
         this.quantity = this.quantity + quantity;
+    }
+
+    public void changeRESTquantity(int quantity){
+        this.quantity = this.quantity - quantity;
     }
 
     public void setPrice(double price) {
