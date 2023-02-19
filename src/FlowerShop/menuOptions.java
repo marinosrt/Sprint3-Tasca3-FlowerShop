@@ -4,6 +4,7 @@ import FlowerShop.domain.*;
 import FlowerShop.repository.ReadWriteTxt;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class menuOptions {
@@ -16,90 +17,73 @@ public class menuOptions {
     public static void createFlowerShop() {
 
         flowerShop = FlowerShop.getInstance(Keyboard.getString("Type the flower's shop name."));
+        System.out.println(flowerShop.getName() + " created!");
         flowershopCreated = true;
     }
 
     public static void addTree() {
 
-        if (flowershopCreated){
-            Product tree = new Tree(Keyboard.getString("What kind of tree is?"),
-                    Keyboard.getDouble("Type the tree's height."),
-                    Keyboard.getDouble("Enter the tree's retail price."),
-                    Keyboard.getInt("How many trees are you adding?"));
-
-            try {
-                ReadWriteTxt.addProduct(tree);
-                System.out.println("Products successfully added!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("First create a flower shop!");
+        Product tree = new Tree(Keyboard.getString("What kind of tree is?"),
+                Keyboard.getDouble("Type the tree's height."),
+                Keyboard.getDouble("Enter the tree's retail price."),
+                Keyboard.getInt("How many trees are you adding?"));
+        try {
+            ReadWriteTxt.addProduct(tree);
+            System.out.println("Products successfully added!");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-
     }
 
     public static void addFlower() {
 
-        if (flowershopCreated){
-            Product flower = new Flower(Keyboard.getString("What kind of flower is?"),
-                    Keyboard.getString("Type the flower's color."),
-                    Keyboard.getDouble("Enter the flower's retail price."),
-                    Keyboard.getInt("How many flowers are you adding?"));
-
-            try {
-                ReadWriteTxt.addProduct(flower);
-                System.out.println("Products successfully added!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("First create a flower shop!");
+        Product flower = new Flower(Keyboard.getString("What kind of flower is?"),
+                Keyboard.getString("Type the flower's color."),
+                Keyboard.getDouble("Enter the flower's retail price."),
+                Keyboard.getInt("How many flowers are you adding?"));
+        try {
+            ReadWriteTxt.addProduct(flower);
+            System.out.println("Products successfully added!");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
 
     }
 
     public static void addDecoration() {
 
-        if (flowershopCreated){
-            Product decoration = new Decoration(Keyboard.getString("What kind of decoration is?"),
-                    Keyboard.getString("It is plastic or wood made?"),
-                    Keyboard.getDouble("Enter the decoration's retail price."),
-                    Keyboard.getInt("How many decorations are you adding?"));
-
-            try {
-                ReadWriteTxt.addProduct(decoration);
-                System.out.println("Products successfully added!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("First create a flower shop!");
+        Product decoration = new Decoration(Keyboard.getString("What kind of decoration is?"),
+                Keyboard.getString("It is plastic or wood made?"),
+                Keyboard.getDouble("Enter the decoration's retail price."),
+                Keyboard.getInt("How many decorations are you adding?"));
+        try {
+            ReadWriteTxt.addProduct(decoration);
+            System.out.println("Products successfully added!");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-
 
     }
 
     public static void printAllStock() {
 
-        if (flowershopCreated){
+        if (ReadWriteTxt.readProductFile() != null){
             ReadWriteTxt.readProductFile().forEach(System.out::println);
         } else {
-            System.out.println("First create a flower shop!");
+            System.out.println("You need to add some products first!");
         }
+
     }
 
     public static void removeProduct(String product) throws IOException {
 
-        if (flowershopCreated){
+        if (ReadWriteTxt.readProductFile() != null){
             ReadWriteTxt.removeProductFromFile(Keyboard.getString("Type the name of the " + product + " you want to remove"));
             System.out.println("Products successfully removed!");
         } else {
-            System.out.println("First create a flower shop!");
+            System.out.println("You need to add some products first!");
         }
+
     }
 
     /* METODES QUE NO FEM SERVIR. ELIMINEM?
@@ -126,21 +110,17 @@ public class menuOptions {
 
     public static void printStockAndQuantities() {
 
-        if (flowershopCreated){
+        if (ReadWriteTxt.readProductFile() != null){
 
         } else {
-            System.out.println("First create a flower shop!");
+            System.out.println("You need to add some products first!");
         }
 
     }
 
     public static void printFullValue() {
 
-        if (flowershopCreated){
 
-        } else {
-            System.out.println("First create a flower shop!");
-        }
 
     }
 
@@ -150,49 +130,59 @@ public class menuOptions {
         int option;
         ticket = new Ticket();
 
-        if (flowershopCreated){
-            do {
-                System.out.println("""
+        do {
+            System.out.println("""
                     1- Add Product.
                     2. Stop adding product to ticket.""");
-                option = Keyboard.getInt("Choose an option.");
+            option = Keyboard.getInt("Choose an option.");
 
-                switch (option){
-                    case 1 -> {
-                        purchaseProduct = new Product(Keyboard.getString("Type the name of the product you want to buy"),
-                                Keyboard.getInt("Type the amount you want to buy"));
-                        createPurchaseTicketCalcul(purchaseProduct);
-                    }
-                    case 2 -> ReadWriteTxt.addTicket(ticket);
-
+            switch (option){
+                case 1 -> {
+                    purchaseProduct = new Product(Keyboard.getString("Type the name of the product you want to buy"),
+                            Keyboard.getInt("Type the amount you want to buy"));
+                    createPurchaseTicketCalcul(purchaseProduct);
                 }
-            } while (option != 2);
-        } else {
-            System.out.println("First create a flower shop!");
-        }
+                case 2 -> ReadWriteTxt.addTicket(ticket);
 
+            }
+        } while (option != 2);
 
     }
 
     public static void createPurchaseTicketCalcul(Product purchaseProduct) throws IOException {
 
-        int amount;
+        int amount = ReadWriteTxt.readProductFile().stream()
+                .filter(databaseProduct -> databaseProduct.getName().equalsIgnoreCase(purchaseProduct.getName()))
+                .mapToInt(Product::getQuantity)
+                .sum();
 
-        if (flowershopCreated){
-            amount = ReadWriteTxt.readProductFile().stream()
+        if (amount >= purchaseProduct.getQuantity()) {
+            ticket.addProduct(purchaseProduct);
+            //aqui no s'hauria de fer remove product sinó canviar la quantitat d'aquell product que ens queda!
+            //ReadWriteTxt.removeProductFromFile(purchaseProduct.getName());
+            //seria una cosa així:
+            ReadWriteTxt.readProductFile().stream()
                     .filter(databaseProduct -> databaseProduct.getName().equalsIgnoreCase(purchaseProduct.getName()))
-                    .mapToInt(Product::getQuantity)
-                    .sum();
-
-            if (amount >= purchaseProduct.getQuantity()) {
-                ticket.addProduct(purchaseProduct);
-                ReadWriteTxt.removeProductFromFile(purchaseProduct.getName());
-                System.out.println("Product added to ticket");
-            } else {
-                System.out.println("The desired quantity exceeds the stock.");
-            }
+                    .findAny()
+                    .ifPresent(databaseProduct -> {
+                        databaseProduct.changeRESTquantity(purchaseProduct.getQuantity());
+                        try {
+                            ReadWriteTxt.addProduct(databaseProduct);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        //
+                        if (databaseProduct.getQuantity() == 0){ //si la quantity es queda a 0 dp d'afegir a ticket, eliminar producte
+                            try {
+                                ReadWriteTxt.removeProductFromFile(purchaseProduct.getName());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
+            System.out.println("Product added to ticket");
         } else {
-            System.out.println("First create a flower shop!");
+            System.out.println("The desired quantity exceeds the stock.");
         }
 
         //s'ha canviat el mètode add i ara no cal recorrer tota la llista,
@@ -202,19 +192,27 @@ public class menuOptions {
 
     public static void printOldPurchases() {
 
-        if (flowershopCreated){
+        if (ReadWriteTxt.readTicketFile() != null){
             ReadWriteTxt.readTicketFile().forEach(System.out::println);
         } else {
-            System.out.println("First create a flower shop!");
+            System.out.println("Create a ticket first!");
         }
+
     }
 
     public static void printTotalSumPurchases() {
 
-        if (flowershopCreated){
+        AtomicInteger totalSumPurchases = new AtomicInteger();
+
+        if (ReadWriteTxt.readTicketFile() != null){
+            ReadWriteTxt.readTicketFile()
+                    .forEach(ticket -> ticket.getProducts()
+                            .forEach(product -> totalSumPurchases.addAndGet(product.getQuantity())));
+
+            System.out.println("The flower shop " + flowerShop.getName() + " has sold a total value of " + totalSumPurchases.get() + "€.");
 
         } else {
-            System.out.println("First create a flower shop!");
+            System.out.println("Create a ticket first!");
         }
     }
 }

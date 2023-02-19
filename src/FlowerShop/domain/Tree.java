@@ -37,6 +37,21 @@ public class Tree extends Product {
 
     }
 
+    @Override
+    public int getQuantity() {
+        return this.quantity;
+    }
+
+    @Override
+    public void changeSUMquantity(int quantity) {
+        this.quantity = this.quantity + quantity;
+    }
+
+    @Override
+    public void changeRESTquantity(int quantity) {
+        this.quantity = this.quantity - quantity;
+    }
+
     public double getHeight() {
         return height;
     }
@@ -50,8 +65,8 @@ public class Tree extends Product {
         return "- Tree. Type: " + super.getName()
                 + "\nID: " + super.productId
                 + ". Height: " + this.height
-                + ". Amount " + super.getQuantity()
-                + ". Price: " + super.getPrice();
+                + ". Total amount " + super.getQuantity()
+                + ". Price per unit: " + super.getPrice();
 
     }
 

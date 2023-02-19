@@ -40,6 +40,21 @@ public class Flower extends Product {
 
     }
 
+    @Override
+    public int getQuantity() {
+        return this.quantity;
+    }
+
+    @Override
+    public void changeSUMquantity(int quantity) {
+        this.quantity = this.quantity + quantity;
+    }
+
+    @Override
+    public void changeRESTquantity(int quantity) {
+        this.quantity = this.quantity - quantity;
+    }
+
     public String getColor() {
         return color;
     }
@@ -54,8 +69,8 @@ public class Flower extends Product {
         return "- Flower. Type: " + super.getName() + "\n" +
                 "ID: " + this.flowerId
                 + ". Color: " + this.color
-                + ". Amount: " + super.getQuantity()
-                + ". Price: " + super.getPrice();
+                + ". Total amount: " + super.getQuantity()
+                + ". Price per unit: " + super.getPrice();
 
     }
 

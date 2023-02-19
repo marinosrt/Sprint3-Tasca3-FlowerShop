@@ -53,17 +53,26 @@ public class ReadWriteTxt {
     }
 
     public static List<Ticket> readTicketFile(){
-        List<Ticket> data = new ArrayList<>();
+        List<Ticket> data = null;
         ObjectInputStream fis = null;
         Ticket ticket;
+        File file;
 
         try {
 
-            fis = new ObjectInputStream(new FileInputStream(ticketPath));
+            file = new File(ticketPath);
 
-            while (fis.available() > 0) {
-                ticket = (Ticket) fis.readObject();
-                data.add(ticket);
+            if (file.exists()){
+                data = new ArrayList<>();
+                fis = new ObjectInputStream(new FileInputStream(ticketPath));
+
+                while ((ticket = (Ticket) fis.readObject()) != null){
+                    data.add(ticket);
+                }
+                /*while (fis.available() > 0) {
+                    ticket = (Ticket) fis.readObject();
+                    data.add(ticket);
+                }*/
             }
         } catch (IOException | ClassNotFoundException ex){
             ex.printStackTrace();
@@ -87,33 +96,30 @@ public class ReadWriteTxt {
         FileOutputStream fos = null;
         ObjectOutputStream writer = null;
         List<Product> data;
-        boolean exit = false;
+        boolean match = false;
 
         File file = new File(productPath);
-
-        if (file.exists()) {
-            data = readProductFile();
-        } else {
-            file.createNewFile();
-            data = new ArrayList<>();
-        }
 
         //comprovem si ja hi ha un producte d'aquest tipus. si hi és, actualitzem
         //quantitats però no afegim un nou producte. Si no hi ha Flower "rosa" (per exemple)
         //afegim la rosa a la llista
 
-        do{
+        if (file.exists()) {
+            data = readProductFile();
             for (Product prodList : data){
                 if (product.getName().equalsIgnoreCase(prodList.getName())){
-                    prodList.setQuantity(product.getQuantity());
-                    exit = true;
-                } else {
-                    data.add(product);
+                    prodList.changeSUMquantity(product.getQuantity());
+                    match = true;
                 }
             }
-        } while(!exit);
-
-
+            if (!match){
+                data.add(product);
+            }
+        } else {
+            file.createNewFile();
+            data = new ArrayList<>();
+            data.add(product);
+        }
 
         try {
 
@@ -140,19 +146,20 @@ public class ReadWriteTxt {
 
         FileOutputStream fos = null;
         ObjectOutputStream writer = null;
-        List<Ticket> data;
+        List<Ticket> data = null;
 
         File file = new File(ticketPath);
 
 
         if (file.exists()) {
             data = readTicketFile();
+            data.add(ticket);
         } else {
             file.createNewFile();
             data = new ArrayList<>();
+            data.add(ticket);
         }
 
-        data.add(ticket);
 
         try {
             fos = new FileOutputStream(ticketPath);
