@@ -9,7 +9,7 @@ public class FlowerShop {
     private Stock stock;
     private static FlowerShop instance;
 
-    public FlowerShop(String name) {
+    private FlowerShop(String name) {
         this.name = name;
         this.purchases = new ArrayList<>();
         this.stock = new Stock();
