@@ -44,7 +44,9 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     /**
      * Adds a quantity to the Tree's total quantity.

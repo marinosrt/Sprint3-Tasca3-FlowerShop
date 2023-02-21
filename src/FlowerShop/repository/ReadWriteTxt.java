@@ -69,6 +69,7 @@ public class ReadWriteTxt {
         ObjectInputStream fis = null;
         Ticket ticket;
         File file;
+        boolean endOfFile = false;
 
         try {
 
@@ -78,9 +79,19 @@ public class ReadWriteTxt {
                 data = new ArrayList<>();
                 fis = new ObjectInputStream(new FileInputStream(ticketPath));
 
+                /* Aquest no funciona
                 while (fis.available() > 0) {
                     ticket = (Ticket) fis.readObject();
                     data.add(ticket);
+                }*/
+
+                while (!endOfFile) {
+                    try {
+                        ticket = (Ticket) fis.readObject();
+                        data.add(ticket);
+                    } catch (EOFException e) {
+                        endOfFile = true;
+                    }
                 }
             }
         } catch (IOException | ClassNotFoundException ex){
@@ -104,7 +115,7 @@ public class ReadWriteTxt {
      * @param product the Product object to add
      * @throws IOException if there is an error while writing to the file
      */
-    public static void addProduct(Product product) throws IOException {
+    public static void addProduct(Product product, boolean sumQuantity) throws IOException {
 
         FileOutputStream fos = null;
         ObjectOutputStream writer = null;
@@ -121,8 +132,12 @@ public class ReadWriteTxt {
             data = readProductFile();
             for (Product prodList : data){
                 if (product.getName().equalsIgnoreCase(prodList.getName())){
-                    prodList.changeSUMquantity(product.getQuantity());
                     match = true;
+                    if (sumQuantity) { //si ve de mètodes addProduct
+                        prodList.changeSUMquantity(product.getQuantity());
+                    } else { //si ve del mètode addTicket, que s'ha de modificar quantity segons producte afegit al ticket
+                        prodList.setQuantity(product.getQuantity());
+                    }
                 }
             }
             if (!match){
@@ -205,7 +220,7 @@ public class ReadWriteTxt {
      * Removes a specified amount of products with the given name from products.txt file.
      *
      * @param nameProduct the name of the product to remove
-     * @param amount the amount of products to remove
+     //* @param amount the amount of products to remove
      * @throws IOException if an I/O error occurs while writing to the file
      */
     public static void removeProductFromFile(String nameProduct) throws IOException {
