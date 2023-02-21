@@ -1,42 +1,47 @@
 package FlowerShop.domain;
 
+import FlowerShop.repository.ReadWriteTxt;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FlowerShop {
     private String name;
-    private List<Ticket> purchases;
-    private Stock stock;
+    private List<Ticket> invoices;
+    private List<Product> inventory;
     private static FlowerShop instance;
 
     private FlowerShop(String name) {
         this.name = name;
-        this.purchases = new ArrayList<>();
-        this.stock = new Stock();
+        this.invoices = new ArrayList<>();
+        this.inventory = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public List<Ticket> getInvoices() {
+        invoices = ReadWriteTxt.readTicketFile();
+        return invoices;
     }
 
-    public List<Ticket> getPurchases() {
-        return purchases;
+    public List<Product> getInventory() {
+        inventory = ReadWriteTxt.readProductFile();
+        return inventory;
     }
 
-    public void setPurchases(List<Ticket> purchases) {
-        this.purchases = purchases;
+    public void removeProductFromInventory(String product) throws IOException {
+        ReadWriteTxt.removeProductFromFile(product);
     }
 
-    public Stock getStock() {
-        return stock;
+    public void addProductToInventory(Product product, boolean sumQuantity) throws IOException {
+        ReadWriteTxt.addProduct(product, sumQuantity);
     }
 
-    public void setStock(Stock stock) {
-        this.stock = stock;
+    public void addTicketToInvoices(Ticket ticket) throws IOException {
+        ReadWriteTxt.addTicket(ticket);
     }
 
     public static FlowerShop getInstance(String name) {
