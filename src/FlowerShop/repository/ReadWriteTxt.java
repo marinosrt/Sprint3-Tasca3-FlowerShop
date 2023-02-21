@@ -1,5 +1,6 @@
 package FlowerShop.repository;
 
+import FlowerShop.domain.FlowerShop;
 import FlowerShop.domain.Product;
 import FlowerShop.domain.Ticket;
 
@@ -14,6 +15,7 @@ public class ReadWriteTxt {
 
     private static final String productPath = "products.txt";
     private static final String ticketPath = "ticket.txt";
+    private static final String flowerShopPath = "flowerShop.txt";
 
 
     /**
@@ -101,6 +103,62 @@ public class ReadWriteTxt {
 
         return data;
     }
+
+    public static FlowerShop checkFlowerShop() throws IOException {
+
+        File file = new File(flowerShopPath);
+        FlowerShop flowerShop = null;
+
+        ObjectInputStream fis = null;
+
+
+        try {
+
+            if (file.exists()){
+
+                fis = new ObjectInputStream(new FileInputStream(flowerShopPath));
+
+                while ((flowerShop = (FlowerShop) fis.readObject()) != null){
+                    flowerShop = (FlowerShop) fis.readObject();
+                }
+            }
+
+        } catch (EOFException ex) {
+            //
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return flowerShop;
+
+    }
+
+    public static void createFlowerShop(FlowerShop flowerShop) {
+        ObjectOutputStream writer = null;
+        FileOutputStream fos = null;
+
+
+        try {
+            fos = new FileOutputStream(flowerShopPath);
+
+            writer = new ObjectOutputStream(fos);
+
+            writer.writeObject(flowerShop);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 
     /**
      * Adds a Product object to a text file.

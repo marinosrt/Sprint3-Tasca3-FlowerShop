@@ -1,6 +1,8 @@
 package FlowerShop;
 
 import FlowerShop.domain.*;
+import FlowerShop.repository.ReadWriteTxt;
+
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -16,11 +18,18 @@ public class menuOptions {
     /**
      * Creates a flower shop and assigns the name provided by the user.
      */
-    public static void createFlowerShop() {
+    public static void createFlowerShop() throws IOException {
 
-        flowerShop = FlowerShop.getInstance(Keyboard.getString("Type the flower's shop name."));
-        System.out.println(flowerShop.getName() + " created!");
-        flowershopCreated = true;
+        if (ReadWriteTxt.checkFlowerShop() != null) {
+            flowerShop = ReadWriteTxt.checkFlowerShop();
+            System.out.println("We already have a flower shop: " + flowerShop.getName());
+        } else {
+            flowerShop = FlowerShop.getInstance(Keyboard.getString("Type the flower's shop name."));
+            System.out.println(flowerShop.getName() + " created!");
+
+            ReadWriteTxt.createFlowerShop(flowerShop);
+        }
+
     }
 
     public static String searchForProductName(String newProduct){
@@ -174,6 +183,8 @@ public class menuOptions {
         Product purchaseProduct;
         int option;
         ticket = new Ticket();
+        String prodName;
+        Product purchProduct;
 
         do {
             System.out.println("""
@@ -214,10 +225,7 @@ public class menuOptions {
                 .sum();
 
         if (amount >= purchaseProduct.getQuantity()) {
-            ticket.addProduct(purchaseProduct, price); //añadir el precio porque sino no lo sabe
-            //aqui no s'hauria de fer remove product sinó canviar la quantitat d'aquell product que ens queda!
-            //ReadWriteTxt.removeProductFromFile(purchaseProduct.getName());
-            //seria una cosa així:
+            ticket.addProduct(purchaseProduct, price);
             flowerShop.getInventory().stream()
                     .filter(databaseProduct -> databaseProduct.getName().equalsIgnoreCase(purchaseProduct.getName()))
                     .findAny()
@@ -228,7 +236,6 @@ public class menuOptions {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                        //
                         if (databaseProduct.getQuantity() == 0){ //si la quantity es queda a 0 dp d'afegir a ticket, eliminar producte
                             try {
                                 flowerShop.removeProductFromInventory(purchaseProduct.getName());
