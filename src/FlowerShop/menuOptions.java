@@ -4,6 +4,7 @@ import FlowerShop.domain.*;
 import FlowerShop.repository.ReadWriteTxt;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -35,7 +36,7 @@ public class menuOptions {
                 Keyboard.getDouble("Enter the tree's retail price."),
                 Keyboard.getInt("How many trees are you adding?"));
         try {
-            ReadWriteTxt.addProduct(tree);
+            ReadWriteTxt.addProduct(tree, true);
             System.out.println("Products successfully added!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,7 +53,7 @@ public class menuOptions {
                 Keyboard.getDouble("Enter the flower's retail price."),
                 Keyboard.getInt("How many flowers are you adding?"));
         try {
-            ReadWriteTxt.addProduct(flower);
+            ReadWriteTxt.addProduct(flower, true);
             System.out.println("Products successfully added!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,7 +71,7 @@ public class menuOptions {
                 Keyboard.getDouble("Enter the decoration's retail price."),
                 Keyboard.getInt("How many decorations are you adding?"));
         try {
-            ReadWriteTxt.addProduct(decoration);
+            ReadWriteTxt.addProduct(decoration, true);
             System.out.println("Products successfully added!");
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,13 +200,20 @@ public class menuOptions {
      */
     public static void createPurchaseTicketCalcul(Product purchaseProduct) throws IOException {
 
+        //saber el precio que tiene este producto en la base de datos
+        double price = ReadWriteTxt.readProductFile().stream()
+                .filter(databaseProduct -> databaseProduct.getName().equalsIgnoreCase(purchaseProduct.getName()))
+                .mapToDouble(Product::getPrice)
+                .findFirst()
+                .orElse(0.0);
+
         int amount = ReadWriteTxt.readProductFile().stream()
                 .filter(databaseProduct -> databaseProduct.getName().equalsIgnoreCase(purchaseProduct.getName()))
                 .mapToInt(Product::getQuantity)
                 .sum();
 
         if (amount >= purchaseProduct.getQuantity()) {
-            ticket.addProduct(purchaseProduct);
+            ticket.addProduct(purchaseProduct, price); //añadir el precio porque sino no lo sabe
             //aqui no s'hauria de fer remove product sinó canviar la quantitat d'aquell product que ens queda!
             //ReadWriteTxt.removeProductFromFile(purchaseProduct.getName());
             //seria una cosa així:
@@ -215,7 +223,7 @@ public class menuOptions {
                     .ifPresent(databaseProduct -> {
                         databaseProduct.changeRESTquantity(purchaseProduct.getQuantity());
                         try {
-                            ReadWriteTxt.addProduct(databaseProduct);
+                            ReadWriteTxt.addProduct(databaseProduct, false);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -244,6 +252,7 @@ public class menuOptions {
     public static void printOldPurchases() {
 
         if (ReadWriteTxt.readTicketFile() != null){
+
             ReadWriteTxt.readTicketFile().forEach(System.out::println);
         } else {
             System.out.println("Create a ticket first!");
