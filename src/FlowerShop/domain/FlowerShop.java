@@ -3,10 +3,11 @@ package FlowerShop.domain;
 import FlowerShop.repository.ReadWriteTxt;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlowerShop {
+public class FlowerShop implements Serializable {
     private String name;
     private List<Ticket> invoices;
     private List<Product> inventory;
