@@ -16,7 +16,6 @@ public class ReadWriteTxt {
     private static final String ticketPath = "ticket.txt";
 
 
-
     /**
      * Reads a list of Product objects from a text file.
      *
@@ -78,12 +77,6 @@ public class ReadWriteTxt {
             if (file.exists()){
                 data = new ArrayList<>();
                 fis = new ObjectInputStream(new FileInputStream(ticketPath));
-
-                /* Aquest no funciona
-                while (fis.available() > 0) {
-                    ticket = (Ticket) fis.readObject();
-                    data.add(ticket);
-                }*/
 
                 while (!endOfFile) {
                     try {
