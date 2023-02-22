@@ -1,4 +1,4 @@
-package FlowerShop;
+package flowershop;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -62,13 +62,13 @@ public class Keyboard {
      * @param message the message to be displayed to the user
      * @return the double entered by the user
      */
-    public static double getDouble(String missatge){
+    public static double getDouble(String message){
         Scanner sc = new Scanner(System.in);
         double input = 0;
         boolean correct = false;
 
         do {
-            System.out.println(missatge);
+            System.out.println(message);
             try {
                 input = sc.nextDouble();
                 correct = true;
