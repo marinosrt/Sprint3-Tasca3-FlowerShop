@@ -13,9 +13,9 @@ public class Product implements Serializable {
     protected int quantity;
     protected long productId;
 
-    public Product(String name, int quantity) {
+    public Product(String name, double price) {
         this.name = name;
-        this.quantity = quantity;
+        this.price = price;
     }
 
     public Product(String name, double price, int quantity) {
@@ -74,4 +74,5 @@ public class Product implements Serializable {
         return "name:" + name + ", price:" + price + ", quantity:" + quantity;
 
     }
+
 }

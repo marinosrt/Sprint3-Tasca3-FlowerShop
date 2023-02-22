@@ -15,13 +15,11 @@ public class Flower extends Product {
     private static long idCounter = 1;
 
 
-
     public Flower(String name, String color, double price, int quantity) {
         super(name, price, quantity);
         this.color = color;
         idCounter = updateID() + 1;
         super.productId = idCounter;
-
     }
 
     /**
@@ -45,7 +43,6 @@ public class Flower extends Product {
         } else {
             return 0;
         }
-
     }
 
     @Override
@@ -87,7 +84,6 @@ public class Flower extends Product {
                 + ". Color: " + this.color
                 + ". Total amount: " + super.getQuantity()
                 + ". Price per unit: " + super.getPrice();
-
     }
 
 }

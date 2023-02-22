@@ -14,13 +14,11 @@ public class Decoration extends Product {
     private static long idCounter = updateID();
 
 
-
     public Decoration(String name, String material, double price, int quantity) {
         super(name, price, quantity);
         this.material = material;
-        idCounter++;
+        idCounter = updateID() + 1;
         super.productId = idCounter;
-
     }
 
     /**
@@ -44,7 +42,6 @@ public class Decoration extends Product {
         } else {
             return 0;
         }
-
     }
 
     public String getMaterial() {
@@ -85,7 +82,6 @@ public class Decoration extends Product {
                 + ". Material: " + this.material
                 + ". Total amount: " + super.getQuantity()
                 + ". Price per unit: " + super.getPrice();
-
     }
 
 }
