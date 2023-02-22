@@ -1,4 +1,4 @@
-package FlowerShop.domain;
+package flowershop.domain;
 
 import java.io.Serializable;
 
@@ -12,6 +12,7 @@ public class Product implements Serializable {
     protected double price;
     protected int quantity;
     protected long productId;
+    private static long idCounter = 1;
 
     public Product(String name, double price) {
         this.name = name;
@@ -22,6 +23,8 @@ public class Product implements Serializable {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.productId = idCounter;
+        idCounter++;
     }
 
     public long getProductId() {
@@ -40,10 +43,6 @@ public class Product implements Serializable {
         return price;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
@@ -52,7 +51,7 @@ public class Product implements Serializable {
      * Adds a quantity to the Tree's total quantity.
      * @param quantity the quantity to be added.
      */
-    public void changeSUMquantity(int quantity) {
+    public void changeSumQuantity(int quantity) {
         this.quantity = this.quantity + quantity;
     }
 
@@ -60,12 +59,8 @@ public class Product implements Serializable {
      * Subtracts a quantity from the Tree's total quantity.
      * @param quantity the quantity to be subtracted.
      */
-    public void changeRESTquantity(int quantity) {
+    public void changeSubstractQuantity(int quantity) {
         this.quantity = this.quantity - quantity;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     @Override

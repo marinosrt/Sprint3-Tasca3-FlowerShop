@@ -1,15 +1,13 @@
-package FlowerShop;
+package flowershop;
 
-import FlowerShop.domain.*;
-import FlowerShop.repository.ReadWriteTxt;
-
+import flowershop.domain.*;
+import flowershop.repository.ReadWriteTxt;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class contains a series of static methods that allow to interact with the program's menu and its options.
  */
-public class menuOptions {
+public class MenuOptions {
     static FlowerShop flowerShop;
 
     static {
@@ -38,13 +36,31 @@ public class menuOptions {
         }
     }
 
-    public static String searchForProductName(String newProduct){
+    public static String searchForProductName(String newProduct) throws IOException {
+
+        int option;
 
         if (flowerShop.getInventory() != null) {
             for (Product productList : flowerShop.getInventory()) {
                 if (productList.getName().equalsIgnoreCase(newProduct)) {
+                    do {
+                        option = Keyboard.getInt("There's already " + newProduct + " into the database. \n" +
+                                "1. Add more " + newProduct + " products. \n" +
+                                "2. Quit");
+
+                        switch (option){
+                            case 1 -> {
+                                productList.changeSumQuantity(Keyboard.getInt("Enter the quantity."));
+                                flowerShop.addProductToInventory(productList);
+                            }
+                            case 2 -> {
+                                System.out.println("Addition cancelled.");
+                                newProduct = "";
+                            }
+                        }
+                    } while (option != 2);
+                } else {
                     newProduct = "";
-                    System.out.println("This type of product already exist into the database. Enter a different one.");
                 }
             }
             return newProduct;
@@ -63,14 +79,14 @@ public class menuOptions {
         if (ReadWriteTxt.checkFlowerShop() != null) {
             do {
                 newTree = Keyboard.getString("What kind of tree is?");
-            } while (menuOptions.searchForProductName(newTree).isEmpty());
+            } while (MenuOptions.searchForProductName(newTree).isEmpty());
 
             Product tree = new Tree(newTree,
                     Keyboard.getDouble("Type the tree's height."),
                     Keyboard.getDouble("Enter the tree's retail price."),
                     Keyboard.getInt("How many trees are you adding?"));
             try {
-                flowerShop.addProductToInventory(tree, true);
+                flowerShop.addProductToInventory(tree);
                 System.out.println("Products successfully added!");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -89,14 +105,14 @@ public class menuOptions {
         if (ReadWriteTxt.checkFlowerShop() != null) {
             do {
                 newFlower = Keyboard.getString("What kind of flower is?");
-            } while (menuOptions.searchForProductName(newFlower).isEmpty());
+            } while (MenuOptions.searchForProductName(newFlower).isEmpty());
 
             Product flower = new Flower(newFlower,
                     Keyboard.getString("Type the flower's color."),
                     Keyboard.getDouble("Enter the flower's retail price."),
                     Keyboard.getInt("How many flowers are you adding?"));
             try {
-                flowerShop.addProductToInventory(flower, true);
+                flowerShop.addProductToInventory(flower);
                 System.out.println("Products successfully added!");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -116,14 +132,14 @@ public class menuOptions {
         if (ReadWriteTxt.checkFlowerShop() != null) {
             do {
                 newDecoration = Keyboard.getString("What kind of decoration is?");
-            } while (menuOptions.searchForProductName(newDecoration).isEmpty());
+            } while (MenuOptions.searchForProductName(newDecoration).isEmpty());
 
             Product decoration = new Decoration(newDecoration,
                     Keyboard.getString("It is plastic or wood made?"),
                     Keyboard.getDouble("Enter the decoration's retail price."),
                     Keyboard.getInt("How many decorations are you adding?"));
             try {
-                flowerShop.addProductToInventory(decoration, true);
+                flowerShop.addProductToInventory(decoration);
                 System.out.println("Products successfully added!");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -176,7 +192,7 @@ public class menuOptions {
 
         if (ReadWriteTxt.checkFlowerShop() != null) {
             if (!flowerShop.getInventory().isEmpty()) {
-                flowerShop.getInventory().forEach(p -> System.out.println("Name: " + p.getName() + " Quantity: " + p.getQuantity()));
+                flowerShop.getInventory().forEach(p -> System.out.println("Name: " + p.getName() + " - Quantity: " + p.getQuantity()));
             } else {
                 System.out.println("You need to add some products first!");
             }
@@ -266,9 +282,9 @@ public class menuOptions {
         if (product.getQuantity() >= productAmountTicket) {
             ticket.addProduct(product.getName(), product.getPrice(), productAmountTicket);
 
-            product.changeRESTquantity(productAmountTicket);
+            product.changeSubstractQuantity(productAmountTicket);
             try {
-                flowerShop.addProductToInventory(product, false);
+                flowerShop.addProductToInventory(product);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -293,6 +309,7 @@ public class menuOptions {
 
         if (ReadWriteTxt.checkFlowerShop() != null) {
             if (!flowerShop.getInvoices().isEmpty()) {
+                System.out.println("All " + flowerShop.getName() + " purchases are:");
                 flowerShop.getInvoices().forEach(System.out::println);
             } else {
                 System.out.println("Create a ticket first!");

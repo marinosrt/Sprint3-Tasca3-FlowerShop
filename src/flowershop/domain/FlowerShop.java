@@ -1,6 +1,6 @@
-package FlowerShop.domain;
+package flowershop.domain;
 
-import FlowerShop.repository.ReadWriteTxt;
+import flowershop.repository.ReadWriteTxt;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlowerShop implements Serializable {
-    private String name;
+    private final String name;
     private List<Ticket> invoices;
     private List<Product> inventory;
     private static FlowerShop instance;
@@ -38,8 +38,8 @@ public class FlowerShop implements Serializable {
         ReadWriteTxt.removeProductFromFile(product);
     }
 
-    public void addProductToInventory(Product product, boolean sumQuantity) throws IOException {
-        ReadWriteTxt.addProduct(product, sumQuantity);
+    public void addProductToInventory(Product product) throws IOException {
+        ReadWriteTxt.addProduct(product);
     }
 
     public void addTicketToInvoices(Ticket ticket) throws IOException {

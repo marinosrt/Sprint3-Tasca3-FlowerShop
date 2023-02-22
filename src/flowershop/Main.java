@@ -1,4 +1,4 @@
-package FlowerShop;
+package flowershop;
 
 import java.io.IOException;
 
@@ -41,19 +41,19 @@ public class Main {
             option = Keyboard.getInt("Choose an option.");
 
             switch (option){
-                case 1 -> menuOptions.createFlowerShop();
-                case 2 -> menuOptions.addTree();
-                case 3 -> menuOptions.addFlower();
-                case 4 -> menuOptions.addDecoration();
-                case 5 -> menuOptions.printAllStock();
-                case 6 -> menuOptions.removeProduct("tree");
-                case 7 -> menuOptions.removeProduct("flower");
-                case 8 -> menuOptions.removeProduct("decoration");
-                case 9 -> menuOptions.printStockAndQuantities();
-                case 10 -> menuOptions.printFullValue();
-                case 11 -> menuOptions.createPurchaseTicket();
-                case 12 -> menuOptions.printOldPurchases();
-                case 13 -> menuOptions.printTotalSumPurchases();
+                case 1 -> MenuOptions.createFlowerShop();
+                case 2 -> MenuOptions.addTree();
+                case 3 -> MenuOptions.addFlower();
+                case 4 -> MenuOptions.addDecoration();
+                case 5 -> MenuOptions.printAllStock();
+                case 6 -> MenuOptions.removeProduct("tree");
+                case 7 -> MenuOptions.removeProduct("flower");
+                case 8 -> MenuOptions.removeProduct("decoration");
+                case 9 -> MenuOptions.printStockAndQuantities();
+                case 10 -> MenuOptions.printFullValue();
+                case 11 -> MenuOptions.createPurchaseTicket();
+                case 12 -> MenuOptions.printOldPurchases();
+                case 13 -> MenuOptions.printTotalSumPurchases();
             }
         } while (option != 0);
 
