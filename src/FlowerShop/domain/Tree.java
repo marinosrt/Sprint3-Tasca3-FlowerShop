@@ -42,14 +42,12 @@ public class Tree extends Product {
         } else {
             return 0;
         }
-
     }
 
     @Override
     public int getQuantity() {
         return this.quantity;
     }
-
 
     /**
      * Adds a quantity to the Tree's total quantity.
@@ -84,7 +82,6 @@ public class Tree extends Product {
                 + ". Height: " + this.height
                 + ". Total amount " + super.getQuantity()
                 + ". Price per unit: " + super.getPrice();
-
     }
 
 }

@@ -24,6 +24,7 @@ public class FlowerShop implements Serializable {
     }
 
     public List<Ticket> getInvoices() {
+
         invoices = ReadWriteTxt.readTicketFile();
         return invoices;
     }
@@ -43,6 +44,7 @@ public class FlowerShop implements Serializable {
 
     public void addTicketToInvoices(Ticket ticket) throws IOException {
         ReadWriteTxt.addTicket(ticket);
+        System.out.println("Your shopping ticket is:\n" + ticket.toString());
     }
 
     public static FlowerShop getInstance(String name) {
@@ -51,4 +53,5 @@ public class FlowerShop implements Serializable {
         }
         return instance;
     }
+
 }

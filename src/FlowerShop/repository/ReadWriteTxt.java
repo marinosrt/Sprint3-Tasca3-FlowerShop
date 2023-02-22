@@ -24,7 +24,7 @@ public class ReadWriteTxt {
      * @return a list of Product objects, or null if the file doesn't exist
      */
     public static List<Product> readProductFile(){
-        List<Product> data = null;
+        List<Product> data = new ArrayList<>();
         ObjectInputStream fis = null;
         Product product;
         File file;
@@ -34,7 +34,6 @@ public class ReadWriteTxt {
             file = new File(productPath);
 
             if (file.exists()){
-                data = new ArrayList<>();
                 fis = new ObjectInputStream(new FileInputStream(productPath));
 
                 while ((product = (Product) fis.readObject()) != null){
@@ -66,7 +65,7 @@ public class ReadWriteTxt {
      * @return a list of Ticket objects
      */
     public static List<Ticket> readTicketFile(){
-        List<Ticket> data = null;
+        List<Ticket> data = new ArrayList<>();
         ObjectInputStream fis = null;
         Ticket ticket;
         File file;
@@ -77,7 +76,6 @@ public class ReadWriteTxt {
             file = new File(ticketPath);
 
             if (file.exists()){
-                data = new ArrayList<>();
                 fis = new ObjectInputStream(new FileInputStream(ticketPath));
 
                 while (!endOfFile) {
