@@ -1,6 +1,10 @@
 package flowershop.domain;
 
+import flowershop.repository.ReadWriteTxt;
+
 import java.io.Serializable;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * The Product class represents any product sold in the flower shop.
@@ -12,7 +16,7 @@ public class Product implements Serializable {
     protected double price;
     protected int quantity;
     protected long productId;
-    private static long idCounter = 1;
+    private static long idCounter = updateID();
 
     public Product(String name, double price) {
         this.name = name;
@@ -23,10 +27,25 @@ public class Product implements Serializable {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.productId = idCounter;
         idCounter++;
+        this.productId = idCounter;
+
     }
 
+    public static long updateID() {
+        List<Product> productList;
+        AtomicLong newID = new AtomicLong(0);
+
+        productList = ReadWriteTxt.readProductFile();
+
+        if (productList != null) {
+
+            productList.stream().reduce((first, second) -> second)
+                    .ifPresent(product -> newID.set(product.getProductId()));
+
+        }
+        return newID.longValue();
+    }
     public long getProductId() {
         return productId;
     }
@@ -43,9 +62,7 @@ public class Product implements Serializable {
         return price;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+
 
     /**
      * Adds a quantity to the Tree's total quantity.

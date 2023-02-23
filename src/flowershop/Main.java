@@ -29,7 +29,7 @@ public class Main {
                     2. Add a tree.
                     3. Add a flower.
                     4. Add a decoration.
-                    5. Print all the stock from the flower show.
+                    5. Print all the stock from the flower shop.
                     6. Remove tree.
                     7. Remove flower.
                     8. Remove decoration.

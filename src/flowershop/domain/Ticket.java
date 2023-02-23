@@ -1,18 +1,36 @@
 package flowershop.domain;
 
+import flowershop.repository.ReadWriteTxt;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Ticket implements Serializable {
     private List<Product> products;
     protected long ticketId;
-    private static long idCounter = 1;
+    private static long idCounter = updateID();
 
     public Ticket() {
         this.products = new ArrayList<>();
-        this.ticketId = idCounter;
         idCounter++;
+        this.ticketId = idCounter;
+    }
+
+    public static long updateID() {
+        List<Product> productList;
+        AtomicLong newID = new AtomicLong(0);
+
+        productList = ReadWriteTxt.readProductFile();
+
+        if (productList != null) {
+
+            productList.stream().reduce((first, second) -> second)
+                    .ifPresent(product -> newID.set(product.getProductId()));
+
+        }
+        return newID.longValue();
     }
 
     public void addProduct(String name, double price, int quantity) {
@@ -25,6 +43,10 @@ public class Ticket implements Serializable {
             total += p.getPrice() * p.getQuantity();
         }
         return total;
+    }
+
+    public List<Product> getProducts() {
+        return products;
     }
 
     @Override

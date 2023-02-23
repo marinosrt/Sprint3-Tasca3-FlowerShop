@@ -1,5 +1,6 @@
 package flowershop.repository;
 
+import flowershop.MenuOptions;
 import flowershop.domain.FlowerShop;
 import flowershop.domain.Product;
 import flowershop.domain.Ticket;
@@ -123,7 +124,6 @@ public class ReadWriteTxt {
         FileOutputStream fos = null;
         ObjectOutputStream writer = null;
         List<Product> data;
-        boolean match = false;
 
         File file = new File(productPath);
 
@@ -283,4 +283,49 @@ public class ReadWriteTxt {
         }
 
     }
+
+    public static void updateProduct(List<Product> inventory) {
+
+        FileOutputStream fos = null;
+        ObjectOutputStream writer = null;
+
+        File file = new File(productPath);
+
+        // Check if file exists, if not create it
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        // Write the products to the file
+        try {
+            fos = new FileOutputStream(productPath);
+            writer = new ObjectOutputStream(fos);
+
+            for (Product product : inventory) {
+                writer.writeObject(product);
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            // Close the output stream and object stream
+            try {
+                if(writer != null){
+                    writer.close();
+                }
+                if(fos != null){
+                    fos.close();
+                }
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 }
+
+
+
