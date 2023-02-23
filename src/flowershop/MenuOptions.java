@@ -3,6 +3,7 @@ package flowershop;
 import flowershop.domain.*;
 import flowershop.repository.ReadWriteTxt;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * This class contains a series of static methods that allow to interact with the program's menu and its options.
@@ -36,36 +37,47 @@ public class MenuOptions {
         }
     }
 
-    public static String searchForProductName(String newProduct) throws IOException {
-
-        int option;
+    public static int searchDuplicated(String newProduct) {
+        boolean match = false;
+        int i = 0;
+        int indexProduct = -1;
+        Product product;
 
         if (flowerShop.getInventory() != null) {
-            for (Product productList : flowerShop.getInventory()) {
-                if (productList.getName().equalsIgnoreCase(newProduct)) {
-                    do {
-                        option = Keyboard.getInt("There's already " + newProduct + " into the database. \n" +
-                                "1. Add more " + newProduct + " products. \n" +
-                                "2. Quit");
 
-                        switch (option){
-                            case 1 -> {
-                                productList.changeSumQuantity(Keyboard.getInt("Enter the quantity."));
-                                flowerShop.addProductToInventory(productList);
-                            }
-                            case 2 -> {
-                                System.out.println("Addition cancelled.");
-                                newProduct = "";
-                            }
-                        }
-                    } while (option != 2);
-                } else {
-                    newProduct = "";
+            while (i < flowerShop.getInventory().size() && !match) {
+                product = flowerShop.getInventory().get(i);
+                if (product.getName().equalsIgnoreCase(newProduct)) {
+                    indexProduct = i;
+                    match = true;
                 }
+                i++;
             }
-            return newProduct;
+        }
+
+        return indexProduct;
+
+
+    }
+
+    public static void changeQuantityExistingProduct(int indexProduct, String newProductName) throws IOException {
+
+        int option;
+        int newQuantity;
+        List<Product> databaseList;
+
+        option = Keyboard.getInt("This type of product already exist. Do you want to:\n" +
+                "1. Add more stock to this product.\n" +
+                "2. Quit.");
+
+        if (option == 1) {
+            newQuantity = Keyboard.getInt("How many more " + newProductName + " you want to add?");
+            databaseList = flowerShop.getInventory();
+            databaseList.get(indexProduct).changeSumQuantity(newQuantity);
+            flowerShop.updateInventory(databaseList);
+            System.out.println("Stock successfully updated!");
         } else {
-            return newProduct;
+            System.out.println("Quitting.");
         }
     }
 
@@ -75,21 +87,26 @@ public class MenuOptions {
     public static void addTree() throws IOException {
 
         String newTree;
+        int found;
+        Product tree;
 
         if (ReadWriteTxt.checkFlowerShop() != null) {
-            do {
-                newTree = Keyboard.getString("What kind of tree is?");
-            } while (MenuOptions.searchForProductName(newTree).isEmpty());
+            newTree = Keyboard.getString("What kind of tree is?");
+            found = searchDuplicated(newTree);
 
-            Product tree = new Tree(newTree,
-                    Keyboard.getDouble("Type the tree's height."),
-                    Keyboard.getDouble("Enter the tree's retail price."),
-                    Keyboard.getInt("How many trees are you adding?"));
-            try {
-                flowerShop.addProductToInventory(tree);
-                System.out.println("Products successfully added!");
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (found != -1){
+                changeQuantityExistingProduct(found, newTree);
+            } else {
+                tree = new Tree(newTree,
+                        Keyboard.getDouble("Type the tree's height."),
+                        Keyboard.getDouble("Enter the tree's retail price."),
+                        Keyboard.getInt("How many trees are you adding?"));
+                try {
+                    flowerShop.addProductToInventory(tree);
+                    System.out.println("Products successfully added!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             System.out.println("First create a flower shop, for God's sake!");
@@ -102,20 +119,26 @@ public class MenuOptions {
     public static void addFlower() throws IOException {
 
         String newFlower;
-        if (ReadWriteTxt.checkFlowerShop() != null) {
-            do {
-                newFlower = Keyboard.getString("What kind of flower is?");
-            } while (MenuOptions.searchForProductName(newFlower).isEmpty());
+        int found;
+        Product flower;
 
-            Product flower = new Flower(newFlower,
-                    Keyboard.getString("Type the flower's color."),
-                    Keyboard.getDouble("Enter the flower's retail price."),
-                    Keyboard.getInt("How many flowers are you adding?"));
-            try {
-                flowerShop.addProductToInventory(flower);
-                System.out.println("Products successfully added!");
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (ReadWriteTxt.checkFlowerShop() != null) {
+            newFlower = Keyboard.getString("What kind of flower is?");
+            found = searchDuplicated(newFlower);
+
+            if (found != -1){
+                changeQuantityExistingProduct(found, newFlower);
+            } else {
+                flower = new Flower(newFlower,
+                        Keyboard.getString("Type the flower's color."),
+                        Keyboard.getDouble("Enter the flower's retail price."),
+                        Keyboard.getInt("How many flowers are you adding?"));
+                try {
+                    flowerShop.addProductToInventory(flower);
+                    System.out.println("Products successfully added!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             System.out.println("First create a flower shop, for God's sake!");
@@ -128,21 +151,26 @@ public class MenuOptions {
     public static void addDecoration() throws IOException {
 
         String newDecoration;
+        int found;
+        Product decoration;
 
         if (ReadWriteTxt.checkFlowerShop() != null) {
-            do {
-                newDecoration = Keyboard.getString("What kind of decoration is?");
-            } while (MenuOptions.searchForProductName(newDecoration).isEmpty());
+            newDecoration = Keyboard.getString("What kind of decoration is?");
+            found = searchDuplicated(newDecoration);
 
-            Product decoration = new Decoration(newDecoration,
-                    Keyboard.getString("It is plastic or wood made?"),
-                    Keyboard.getDouble("Enter the decoration's retail price."),
-                    Keyboard.getInt("How many decorations are you adding?"));
-            try {
-                flowerShop.addProductToInventory(decoration);
-                System.out.println("Products successfully added!");
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (found != -1){
+                changeQuantityExistingProduct(found, newDecoration);
+            } else {
+                decoration = new Decoration(newDecoration,
+                        Keyboard.getString("It is plastic or wood made?"),
+                        Keyboard.getDouble("Enter the decoration's retail price."),
+                        Keyboard.getInt("How many decorations are you adding?"));
+                try {
+                    flowerShop.addProductToInventory(decoration);
+                    System.out.println("Products successfully added!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             System.out.println("First create a flower shop, for God's sake!");
@@ -173,10 +201,18 @@ public class MenuOptions {
      */
     public static void removeProduct(String product) throws IOException {
 
+        String removeProduct;
+
         if (ReadWriteTxt.checkFlowerShop() != null) {
             if (!flowerShop.getInventory().isEmpty()) {
-                flowerShop.removeProductFromInventory(Keyboard.getString("Type the name of the " + product + " you want to remove"));
-                System.out.println("Products successfully removed!");
+                removeProduct = Keyboard.getString("Type the name of the " + product + " you want to remove");
+                if(searchDuplicated(removeProduct) != -1) {
+                    flowerShop.removeProductFromInventory(removeProduct);
+                    System.out.println("Products successfully removed!");
+                } else {
+                    System.out.println("There's no product with this name in our inventory");
+                }
+
             } else {
                 System.out.println("You need to add some products first!");
             }
@@ -225,18 +261,17 @@ public class MenuOptions {
     public static void createPurchaseTicket() throws IOException {
 
         Product product = null;
-        int option;
-        Ticket ticket = new Ticket();
+        Ticket ticket = null;
         String productName;
-        int productAmountTicket;
         boolean found;
+        int option, productAmountTicket, index = 0;
 
         if (ReadWriteTxt.checkFlowerShop() != null) {
             if (!flowerShop.getInventory().isEmpty()){
                 do {
                     System.out.println("""
                         1- Add Product.
-                        2. Stop adding product to ticket.""");
+                        2. Finish the ticket.""");
                     option = Keyboard.getInt("Choose an option.");
 
                     switch (option) {
@@ -246,6 +281,7 @@ public class MenuOptions {
                             int i = 0; //reiniciar abans de cada iteració
                             while (i < flowerShop.getInventory().size() && !found) {
                                 if (flowerShop.getInventory().get(i).getName().equalsIgnoreCase(productName)) {
+                                    index = i;
                                     product = flowerShop.getInventory().get(i);
                                     found = true;
                                 }
@@ -255,13 +291,18 @@ public class MenuOptions {
                                 productAmountTicket = Keyboard.getInt("Type the amount you want to buy");
 
                                 assert product != null;
-                                createPurchaseTicketCalcul(product, productAmountTicket, ticket);
+                                ticket = new Ticket();
+                                createPurchaseTicketCalcul(product, productAmountTicket, ticket, index);
                             } else {
                                 System.out.println("We don't have this type of product.");
                             }
 
                         }
-                        case 2 -> flowerShop.addTicketToInvoices(ticket);
+                        case 2 -> {
+                            if(ticket != null) {
+                                flowerShop.addTicketToInvoices(ticket);
+                            }
+                        }
                     }
                 } while (option != 2);
             } else {
@@ -277,18 +318,22 @@ public class MenuOptions {
      *
      * @param product the product to add
      */
-    public static void createPurchaseTicketCalcul(Product product, int productAmountTicket, Ticket ticket) {
+    public static void createPurchaseTicketCalcul(Product product, int productAmountTicket, Ticket ticket, int index) {
+
+        List<Product> databaseList;
 
         if (product.getQuantity() >= productAmountTicket) {
             ticket.addProduct(product.getName(), product.getPrice(), productAmountTicket);
 
             product.changeSubstractQuantity(productAmountTicket);
             try {
-                flowerShop.addProductToInventory(product);
+                databaseList = flowerShop.getInventory();
+                databaseList.get(index).changeSubstractQuantity(productAmountTicket);
+                flowerShop.updateInventory(databaseList);
+                System.out.println("Stock successfully updated!");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
             if (product.getQuantity() == 0){ //si la quantity es queda a 0 dp d'afegir a ticket, eliminar producte
                 try {
                     flowerShop.removeProductFromInventory(product.getName());

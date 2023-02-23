@@ -47,6 +47,11 @@ public class FlowerShop implements Serializable {
         System.out.println("Your shopping ticket is:\n" + ticket.toString());
     }
 
+    public void updateInventory(List<Product> inventory) throws IOException {
+        ReadWriteTxt.updateProduct(inventory);
+
+    }
+
     public static FlowerShop getInstance(String name) {
         if (instance == null) {
             instance = new FlowerShop(name);
