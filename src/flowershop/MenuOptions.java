@@ -2,6 +2,7 @@ package flowershop;
 
 import flowershop.domain.*;
 import flowershop.repository.ReadWriteTxt;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -260,56 +261,57 @@ public class MenuOptions {
      */
     public static void createPurchaseTicket() throws IOException {
 
-        Product product = null;
         Ticket ticket = null;
-        String productName;
-        boolean found;
-        int option, productAmountTicket, index = 0;
+        int option;
 
-        if (ReadWriteTxt.checkFlowerShop() != null) {
-            if (!flowerShop.getInventory().isEmpty()){
+        if (ReadWriteTxt.checkFlowerShop() != null){
+            if (flowerShop.getInventory() != null){
                 do {
-                    System.out.println("""
-                        1- Add Product.
-                        2. Finish the ticket.""");
-                    option = Keyboard.getInt("Choose an option.");
+                    option = Keyboard.getInt("1. Add product to the ticket." +
+                            "\n2. Exit.");
 
-                    switch (option) {
+                    switch (option){
                         case 1 -> {
-                            productName = Keyboard.getString("Type the name of the product you want to buy");
-                            found = false; // agregar aquesta línia per reiniciar el valor de la variable
-                            int i = 0; //reiniciar abans de cada iteració
-                            while (i < flowerShop.getInventory().size() && !found) {
-                                if (flowerShop.getInventory().get(i).getName().equalsIgnoreCase(productName)) {
-                                    index = i;
-                                    product = flowerShop.getInventory().get(i);
-                                    found = true;
-                                }
-                                i++;
-                            }
-                            if (found){
-                                productAmountTicket = Keyboard.getInt("Type the amount you want to buy");
-
-                                assert product != null;
+                            if (ticket == null){
                                 ticket = new Ticket();
-                                createPurchaseTicketCalcul(product, productAmountTicket, ticket, index);
+                                addProductsTicket(ticket);
                             } else {
-                                System.out.println("We don't have this type of product.");
+                                addProductsTicket(ticket);
                             }
-
                         }
                         case 2 -> {
-                            if(ticket != null) {
+                            if (ticket != null){
                                 flowerShop.addTicketToInvoices(ticket);
                             }
+                            System.out.println("Bye!");
                         }
                     }
                 } while (option != 2);
             } else {
-                System.out.println("First add some products!");
+                System.out.println("First add some products, for Gods sake!");
             }
         } else {
-            System.out.println("First create a flower shop, for God's sake!");
+            System.out.println("First create a flower shop!");
+        }
+
+    }
+
+    private static void addProductsTicket(Ticket ticket) {
+
+        Product product;
+        String productName;
+        int amount, index;
+
+        productName = Keyboard.getString("Type the name of the product you want to buy");
+        index = searchDuplicated(productName);
+
+        if (index != -1){
+            amount = Keyboard.getInt("Type the quantity you want to add to the ticket");
+            product = flowerShop.getInventory().get(index);
+            createPurchaseTicketCalcul(product, amount, ticket, index);
+            System.out.println("Product added to the ticket!");
+        } else {
+            System.out.println("We don't have this type of product");
         }
     }
 
@@ -341,10 +343,10 @@ public class MenuOptions {
                     throw new RuntimeException(e);
                 }
             }
-            System.out.println("Product added to ticket");
         } else {
             System.out.println("The desired quantity exceeds the stock.");
         }
+
     }
 
     /**

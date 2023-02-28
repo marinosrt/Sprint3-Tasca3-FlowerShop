@@ -19,15 +19,15 @@ public class Ticket implements Serializable {
     }
 
     public static long updateID() {
-        List<Product> productList;
+        List<Ticket> ticketList;
         AtomicLong newID = new AtomicLong(0);
 
-        productList = ReadWriteTxt.readProductFile();
+        ticketList = ReadWriteTxt.readTicketFile();
 
-        if (productList != null) {
+        if (ticketList != null) {
 
-            productList.stream().reduce((first, second) -> second)
-                    .ifPresent(product -> newID.set(product.getProductId()));
+            ticketList.stream().reduce((first, second) -> second)
+                    .ifPresent(ticket -> newID.set(ticket.getTicketId()));
 
         }
         return newID.longValue();
@@ -35,6 +35,10 @@ public class Ticket implements Serializable {
 
     public void addProduct(String name, double price, int quantity) {
         this.products.add(new Product(name, price, quantity));
+    }
+
+    public long getTicketId() {
+        return ticketId;
     }
 
     public double getTotalValue() {
@@ -55,7 +59,7 @@ public class Ticket implements Serializable {
         for (Product p : products) {
             sb.append("  ").append(p.getName()).append(" (x").append(p.getQuantity()).append("): ").append(p.getPrice()).append("\n");
         }
-        sb.append("  ---Total: ").append(getTotalValue()).append("\n}");
+        sb.append("  ---Total: ").append(getTotalValue()).append("€\n}");
 
         return sb.toString();
     }
